@@ -1,39 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>Leaflet Map</title>
+  <meta charset="utf-8" />
+  <title>Interactive Leaflet Map</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<style>
-#map {
-  height: 100vh;
-  width: 100%;
-}
-</style>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 
 <body>
-
 <div id="map"></div>
 
 <script>
+  // -----------------------------
+  // 1. Parse URL parameters
+  // -----------------------------
+  const params = new URLSearchParams(window.location.search);
 
-var map = L.map('map').setView([45.5019, -73.5674], 12);
+  // Center coordinates (viewFrom)
+  const centerLat = parseFloat(params.get("centerLat")) || 45.5019; // default Montreal
+  const centerLng = parseFloat(params.get("centerLng")) || -73.5674;
+  const zoom = parseInt(params.get("zoom")) || 12;
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
- attribution: '© OpenStreetMap'
-}).addTo(map);
+  // Locations JSON (example format)
+  // [{"lat":45.5,"lng":-73.6,"name":"A","details":"Some details"}]
+  const locations = JSON.parse(params.get("data") || "[]");
 
-// Example marker
-L.marker([45.5019, -73.5674]).addTo(map)
- .bindPopup("Montreal")
- .openPopup();
+  // -----------------------------
+  // 2. Initialize map
+  // -----------------------------
+  const map = L.map('map').setView([centerLat, centerLng], zoom);
+
+  // OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // -----------------------------
+  // 3. Add markers
+  // -----------------------------
+  const markerGroup = L.layerGroup().addTo(map); // allows easy clearing
+
+  locations.forEach(loc => {
+    const marker = L.marker([loc.lat, loc.lng]).addTo(markerGroup);
+
+    // Popup content
+    const popupContent = `<b>${loc.name}</b><br>${loc.details || ""}`;
+    marker.bindPopup(popupContent);
+
+    // Optional: Open popup on click (default Leaflet behavior)
+    marker.on('click', function(e) {
+      marker.openPopup();
+    });
+  });
+
+  // -----------------------------
+  // 4. Close popups when clicking on the map
+  // -----------------------------
+  map.on('click', function() {
+    map.closePopup();
+  });
 
 </script>
-
 </body>
 </html>
