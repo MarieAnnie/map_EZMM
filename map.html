@@ -21,11 +21,11 @@
       height: 100%;
     }
     .leaflet-popup-content-wrapper {
-    max-width: 80%;
+    max-width: 1000px;
     }
 
     .leaflet-popup-content {
-        max-width: 75%;
+        max-width: 975px;
     }
 
     .leaflet-popup-content {
@@ -71,7 +71,7 @@
     const marker = L.marker([loc.lat, loc.lng]).addTo(markerGroup);
 
     // Popup content
-    const popupContent = `${loc.name} <a href="${loc.url}" target="_blank">+</a>`;
+    const popupContent = `${loc.name} ${loc.url}`//<a href="${loc.url}" target="_blank">+</a>`;
     marker.bindPopup(popupContent);
 
     // Optional: Open popup on click (default Leaflet behavior)
