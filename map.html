@@ -22,7 +22,10 @@
     }
     .leaflet-popup-content {
     font-size: 4em;
-  }
+    }
+    .leaflet-popup-tip-container {
+      width: 100px;
+    }
   </style>
 </head>
 
@@ -41,7 +44,7 @@
   const zoom = parseInt(params.get("zoom")) || 12;
 
   // Locations JSON (example format)
-  // [{"lat":45.5,"lng":-73.6,"name":"A","details":"Some details"}]
+  // [{"lat":45.5,"lng":-73.6,"name":"A","url":"url for hyperlink"}]
   const locations = JSON.parse(params.get("data") || "[]");
 
   // -----------------------------
@@ -63,7 +66,7 @@
     const marker = L.marker([loc.lat, loc.lng]).addTo(markerGroup);
 
     // Popup content
-    const popupContent = `<b>${loc.name}</b><br>${loc.details || ""}`;
+    const popupContent = `${loc.name} ${loc.url ? `<a href="${loc.url}" target="_blank">+</a>` : ""}`;
     marker.bindPopup(popupContent);
 
     // Optional: Open popup on click (default Leaflet behavior)
