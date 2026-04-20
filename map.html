@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Interactive Leaflet Map</title>
 
   <!-- Leaflet CSS -->
@@ -20,16 +21,9 @@
       width: 100%;
       height: 100%;
     }
-    .leaflet-popup-content-wrapper {
-    max-width: 700px;
-    }
 
     .leaflet-popup-content {
-        max-width: 675px;
-    }
-
-    .leaflet-popup-content {
-        font-size: 4em;
+        font-size: 3.5em;
         }
   </style>
 </head>
@@ -71,7 +65,7 @@
     const marker = L.marker([loc.lat, loc.lng]).addTo(markerGroup);
 
     // Popup content
-    const popupContent = `${loc.name} <a href="${loc.url}" target="_blank">+</a>`;
+    const popupContent = `${loc.name} <a href="${loc.url}" target="_blank">&#128279;</a>`;
     marker.bindPopup(popupContent);
 
     // Optional: Open popup on click (default Leaflet behavior)
